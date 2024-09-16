@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "535856558719",
+    "project_id": "firetodo-493d2",
+    "storage_bucket": "firetodo-493d2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:535856558719:android:0d1f3585ac0e9f9d4b854a",
+        "android_client_info": {
+          "package_name": "com.prei.firetodo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7z_OqYP7IkiF2GlCHluSwF2q8ZwuEPH8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
