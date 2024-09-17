@@ -1,7 +1,10 @@
+import 'package:firetodo/bloc/todo_cubit/todo_cubit.dart';
 import 'package:firetodo/data/configs/g_color.dart';
 import 'package:firetodo/data/models/todo.dart';
 import 'package:firetodo/helpers/galert.dart';
+import 'package:firetodo/helpers/gnavigation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddTodoSheet extends StatefulWidget {
   final Todo? todo;
@@ -79,6 +82,10 @@ class _AddTodoSheetState extends State<AddTodoSheet> {
       GAlert.showAlert("Title cannot be empty");
       return;
     }
+    final newTodo = Todo(title: title);
+
+    BlocProvider.of<TodoCubit>(context).addTodo(newTodo);
+    GNavigation.pop();
   }
 
   void onEdit() {
@@ -86,5 +93,12 @@ class _AddTodoSheetState extends State<AddTodoSheet> {
       GAlert.showAlert("Title cannot be empty");
       return;
     }
+    if (widget.todo == null) {
+      GAlert.showAlert("Failed to update todo");
+      return;
+    }
+    final updatedTodo = widget.todo!.copyWith(title: title);
+    BlocProvider.of<TodoCubit>(context).updateTodo(updatedTodo);
+    GNavigation.pop();
   }
 }

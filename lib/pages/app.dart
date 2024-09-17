@@ -1,3 +1,4 @@
+import 'package:firetodo/components/g_bloc_providers.dart';
 import 'package:firetodo/data/configs/g_color.dart';
 import 'package:firetodo/pages/todo_list.dart';
 import 'package:flutter/material.dart';
@@ -10,13 +11,15 @@ class App extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: GColor.light,
-      darkTheme: GColor.dark,
-      themeMode: ThemeMode.system,
-      navigatorKey: materialAppKey,
-      home: const TodoList(),
+    return GBlocProviders(
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: GColor.light,
+        darkTheme: GColor.dark,
+        themeMode: ThemeMode.system,
+        navigatorKey: materialAppKey,
+        home: const TodoList(),
+      ),
     );
   }
 }

@@ -6,7 +6,7 @@ class GColor {
   static ColorScheme get scheme =>
       Theme.of(materialAppKey.currentContext!).colorScheme;
 
-  static final Color _seedColor = const Color(0xFFFF4000);
+  static const Color _seedColor = Color(0xFFFF4000);
 
   // Theme Data to put into Material App
   static ThemeData get light => ThemeData(
