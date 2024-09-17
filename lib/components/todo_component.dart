@@ -18,6 +18,12 @@ class _TodoComponentState extends State<TodoComponent> {
   late bool isCompleted = widget.todo.isCompleted;
   bool isLoading = false;
   @override
+  void didUpdateWidget(covariant TodoComponent oldWidget) {
+    isCompleted = widget.todo.isCompleted;
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
     Theme.of(context);
     return Stack(

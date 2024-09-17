@@ -1,4 +1,5 @@
 import 'package:firetodo/bloc/todo_cubit/todo_cubit.dart';
+import 'package:firetodo/repository/todo_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,7 +11,9 @@ class GBlocProviders extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => TodoCubit()..getTodos()),
+        BlocProvider(
+          create: (context) => TodoCubit(TodoRepository())..getTodos(),
+        ),
       ],
       child: child,
     );

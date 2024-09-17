@@ -4,7 +4,7 @@ class TodoState extends Equatable {
   final CubitStatus status;
   final List<Todo> todos;
   const TodoState({
-    this.status = CubitStatus.inital,
+    this.status = CubitStatus.initial,
     this.todos = const [],
   });
 

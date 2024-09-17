@@ -1,1 +1,1 @@
-enum CubitStatus { inital, gettingData, updating }
+enum CubitStatus { initial, gettingData, updating }
