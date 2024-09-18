@@ -14,6 +14,8 @@ class TodoCubit extends Cubit<TodoState> {
   ITodoRepository repositroy;
   TodoCubit(this.repositroy) : super(const TodoState());
 
+  String searchedTitle = '';
+
   StreamSubscription<List<Todo>>? todoCollectionSub;
 
   Future<void> getTodos() async {
@@ -22,6 +24,7 @@ class TodoCubit extends Cubit<TodoState> {
     emit(state.copyWith(
       status: CubitStatus.initial,
       todos: todos,
+      todosView: todos.toList(),
     ));
     if (todoCollectionSub == null) {
       final todoStream = repositroy.getStream();
@@ -29,14 +32,40 @@ class TodoCubit extends Cubit<TodoState> {
     }
   }
 
-  void _todoCollectListener(List<Todo> snapshots) {
-    emit(state.copyWith(todos: snapshots));
+  void filterTodo(String title) {
+    searchedTitle = title;
+    List<Todo> todoView;
+    if (searchedTitle.isEmpty) {
+      todoView = state.todos.toList();
+    } else {
+      todoView = state.todos
+          .where((todo) => todo.title?.contains(searchedTitle) ?? false)
+          .toList();
+    }
+
+    emit(state.copyWith(todosView: todoView));
   }
 
-  Future<void> refreshTodo() async {
-    final todos = await repositroy.getTodos();
-    emit(state.copyWith(todos: todos));
+  void _todoCollectListener(List<Todo> snapshots) {
+    List<Todo> todoView;
+    if (searchedTitle.isEmpty) {
+      todoView = snapshots.toList();
+    } else {
+      todoView = snapshots
+          .where((todo) => todo.title?.contains(searchedTitle) ?? false)
+          .toList();
+    }
+
+    emit(state.copyWith(todos: snapshots, todosView: todoView));
   }
+
+  // Future<void> refreshTodo() async {
+  //   final todos = await repositroy.getTodos();
+  //   emit(state.copyWith(
+  //     todos: todos,
+  //     todosView: todos.toList(),
+  //   ));
+  // }
 
   Future<void> addTodo(Todo todo) async {
     emit(state.copyWith(status: CubitStatus.updating));
@@ -52,6 +81,13 @@ class TodoCubit extends Cubit<TodoState> {
   Future<void> updateTodo(Todo todo) async {
     emit(state.copyWith(status: CubitStatus.updating));
     final response = await repositroy.updateTodo(todo);
+    if (!response.isSuccess) GAlert.showAlert(response.msg);
+    emit(state.copyWith(status: CubitStatus.initial));
+  }
+
+  Future<void> markTodo(Todo todo) async {
+    emit(state.copyWith(status: CubitStatus.updating));
+    final response = await repositroy.markTodo(todo);
     if (!response.isSuccess) GAlert.showAlert(response.msg);
     emit(state.copyWith(status: CubitStatus.initial));
   }

@@ -5,6 +5,7 @@ abstract class ITodoRepository {
   Future<List<Todo>> getTodos();
   Future<BaseResponse<Todo>> addTodo(Todo todo);
   Future<BaseResponse<Todo>> updateTodo(Todo todo);
+  Future<BaseResponse<String>> markTodo(Todo todo);
   Future<String> deleteTodo(Todo todo);
   Stream<List<Todo>> getStream();
 }

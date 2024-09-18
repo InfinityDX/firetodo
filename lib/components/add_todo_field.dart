@@ -13,7 +13,7 @@ class AddTodoField extends StatelessWidget {
   Widget build(BuildContext context) {
     final textEditingController = TextEditingController(text: todo?.title);
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
           Expanded(
@@ -53,7 +53,7 @@ class AddTodoField extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 8),
+          if (todo != null) const SizedBox(width: 8),
           if (todo != null)
             IconButton.filled(
               onPressed: () {

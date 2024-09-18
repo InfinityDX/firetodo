@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firetodo/data/models/base_response.dart';
 import 'package:firetodo/data/models/todo.dart';
@@ -59,6 +61,16 @@ class TodoRepository implements ITodoRepository {
       return BaseResponse(data: todo.copyWith(), isSuccess: true);
     }
     return BaseResponse(msg: 'Todo title already exists');
+  }
+
+  @override
+  Future<BaseResponse<String>> markTodo(Todo todo) async {
+    var response = BaseResponse(data: 'Success', isSuccess: true);
+    await todoCollection.doc(todo.id).set(todo).catchError((e) {
+      log("Error Mark Todo: $e");
+      response = BaseResponse(data: "Could not modify todo");
+    });
+    return response;
   }
 
   @override

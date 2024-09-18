@@ -184,7 +184,7 @@ class _TodoComponentState extends State<TodoComponent> {
 
     isCompleted = !isCompleted;
     final updatedTodo = widget.todo.copyWith(isCompleted: isCompleted);
-    await BlocProvider.of<TodoCubit>(context).updateTodo(updatedTodo);
+    await BlocProvider.of<TodoCubit>(context).markTodo(updatedTodo);
 
     setState(() => isLoading = false);
   }
