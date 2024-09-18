@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firetodo/data/enums/cubit_enums.dart';
 import 'package:firetodo/data/models/todo.dart';
+import 'package:firetodo/helpers/galert.dart';
 import 'package:firetodo/repository/interfaces/i_todo_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -39,7 +40,8 @@ class TodoCubit extends Cubit<TodoState> {
 
   Future<void> addTodo(Todo todo) async {
     emit(state.copyWith(status: CubitStatus.updating));
-    await repositroy.addTodo(todo);
+    final response = await repositroy.addTodo(todo);
+    if (!response.isSuccess) GAlert.showAlert(response.msg);
     emit(state.copyWith(status: CubitStatus.initial));
   }
 
@@ -49,7 +51,8 @@ class TodoCubit extends Cubit<TodoState> {
 
   Future<void> updateTodo(Todo todo) async {
     emit(state.copyWith(status: CubitStatus.updating));
-    await repositroy.updateTodo(todo);
+    final response = await repositroy.updateTodo(todo);
+    if (!response.isSuccess) GAlert.showAlert(response.msg);
     emit(state.copyWith(status: CubitStatus.initial));
   }
 

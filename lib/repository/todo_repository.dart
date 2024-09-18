@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firetodo/data/models/base_response.dart';
 import 'package:firetodo/data/models/todo.dart';
 import 'package:firetodo/repository/interfaces/i_todo_repository.dart';
 
@@ -19,9 +20,18 @@ class TodoRepository implements ITodoRepository {
   );
 
   @override
-  Future<Todo> addTodo(Todo todo) async {
-    final docRef = await todoCollection.add(todo);
-    return todo.copyWith(id: docRef.id);
+  Future<BaseResponse<Todo>> addTodo(Todo todo) async {
+    final existingTodo =
+        await todoCollection.where('title', isEqualTo: todo.title).get();
+
+    if (existingTodo.docs.isEmpty) {
+      final docRef = await todoCollection.add(todo);
+      return BaseResponse(
+        data: todo.copyWith(id: docRef.id),
+        isSuccess: true,
+      );
+    }
+    return BaseResponse(msg: "Todo title already exists");
   }
 
   @override
@@ -41,9 +51,14 @@ class TodoRepository implements ITodoRepository {
   }
 
   @override
-  Future<Todo> updateTodo(Todo todo) async {
-    await todoCollection.doc(todo.id).set(todo);
-    return todo.copyWith();
+  Future<BaseResponse<Todo>> updateTodo(Todo todo) async {
+    final exisitngTodo =
+        await todoCollection.where('title', isEqualTo: todo.title).get();
+    if (exisitngTodo.docs.isEmpty) {
+      await todoCollection.doc(todo.id).set(todo);
+      return BaseResponse(data: todo.copyWith(), isSuccess: true);
+    }
+    return BaseResponse(msg: 'Todo title already exists');
   }
 
   @override
