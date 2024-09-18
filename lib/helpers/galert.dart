@@ -39,6 +39,10 @@ class GAlert {
           content: Text("Are you sure you want to delete todo ${todo.title}"),
           backgroundColor: GColor.scheme.surface,
           actions: [
+            const FilledButton.tonal(
+              onPressed: GNavigation.pop,
+              child: Text('Cancel'),
+            ),
             StatefulBuilder(
               builder: (context, setState) {
                 Theme.of(context);
@@ -62,10 +66,6 @@ class GAlert {
                 );
               },
             ),
-            const FilledButton.tonal(
-              onPressed: GNavigation.pop,
-              child: Text('Cancel'),
-            )
           ],
         );
       },

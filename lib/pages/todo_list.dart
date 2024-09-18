@@ -1,6 +1,6 @@
 import 'package:firetodo/bloc/todo_cubit/todo_cubit.dart';
 import 'package:firetodo/components/todo_component.dart';
-import 'package:firetodo/components/todo_search.dart';
+import 'package:firetodo/components/add_todo_field.dart';
 import 'package:firetodo/data/enums/cubit_enums.dart';
 import 'package:firetodo/helpers/gbottomsheet.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +27,12 @@ class _TodoListState extends State<TodoList> {
         onRefresh: BlocProvider.of<TodoCubit>(context).refreshTodo,
         child: Column(
           children: [
-            const TodoSearch(),
+            BlocBuilder<TodoCubit, TodoState>(
+              builder: (context, state) {
+                final todo = state.editingTodo;
+                return AddTodoField(todo: todo);
+              },
+            ),
             Expanded(
               child: BlocBuilder<TodoCubit, TodoState>(
                 builder: (context, state) {
@@ -80,11 +85,11 @@ class _TodoListState extends State<TodoList> {
           ],
         ),
       ),
-      floatingActionButton: const FloatingActionButton(
-        onPressed: GBottomSheet.showAddSheet,
-        tooltip: 'Add Todo',
-        child: Icon(Icons.add),
-      ),
+      // floatingActionButton: const FloatingActionButton(
+      //   onPressed: GBottomSheet.showAddSheet,
+      //   tooltip: 'Add Todo',
+      //   child: Icon(Icons.add),
+      // ),
     );
   }
 }

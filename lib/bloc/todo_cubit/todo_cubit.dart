@@ -43,6 +43,10 @@ class TodoCubit extends Cubit<TodoState> {
     emit(state.copyWith(status: CubitStatus.initial));
   }
 
+  Future<void> selectTodoForUpdate([Todo? todo]) async {
+    emit(state.copyWith(editingTodo: todo));
+  }
+
   Future<void> updateTodo(Todo todo) async {
     emit(state.copyWith(status: CubitStatus.updating));
     await repositroy.updateTodo(todo);

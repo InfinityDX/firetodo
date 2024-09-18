@@ -17,9 +17,15 @@ class TodoComponent extends StatefulWidget {
 
 class _TodoComponentState extends State<TodoComponent> {
   late bool isCompleted = widget.todo.isCompleted;
-  final double defaultHeight = 48;
+  final double defaultHeight = 56;
   bool isLoading = false;
   bool isExapnded = false;
+
+  @override
+  void didUpdateWidget(covariant TodoComponent oldWidget) {
+    isCompleted = widget.todo.isCompleted;
+    super.didUpdateWidget(oldWidget);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,45 +41,44 @@ class _TodoComponentState extends State<TodoComponent> {
       ),
       child: Stack(
         children: [
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              height: defaultHeight,
-              padding: const EdgeInsets.all(8),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: FilledButton.tonal(
-                      onPressed: () => GBottomSheet.showEditSheet(widget.todo),
-                      child: const Text('Edit'),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: FilledButton(
-                      onPressed: () => GAlert.showDeleteAlert(widget.todo),
-                      child: const Text('Delete'),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          //? Edit/Delete buttons behind item
+          // Align(
+          //   alignment: Alignment.bottomCenter,
+          //   child: Container(
+          //     height: defaultHeight,
+          //     padding: const EdgeInsets.all(8),
+          //     child: Row(
+          //       children: [
+          //         Expanded(
+          //           child: FilledButton.tonal(
+          //             onPressed: () => GBottomSheet.showEditSheet(widget.todo),
+          //             child: const Text('Edit'),
+          //           ),
+          //         ),
+          //         const SizedBox(width: 8),
+          //         Expanded(
+          //           child: FilledButton(
+          //             onPressed: () => GAlert.showDeleteAlert(widget.todo),
+          //             child: const Text('Delete'),
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
           GestureDetector(
             onTap: () {
-              setState(() {
-                isExapnded = !isExapnded;
-              });
+              //? Open Edit/Delete drawer
+              // setState(() {
+              //   isExapnded = !isExapnded;
+              // });
             },
             // onLongPress: () => GBottomSheet.showEditSheet(widget.todo),
             child: AnimatedContainer(
               curve: Curves.fastOutSlowIn,
               duration: const Duration(milliseconds: 250),
-              padding: const EdgeInsets.only(left: 16),
-              height: 48,
-              onEnd: () {
-                print('end expanding');
-              },
+              padding: const EdgeInsets.only(left: 16, right: 8),
+              height: defaultHeight,
               decoration: BoxDecoration(
                 color: isCompleted
                     ? GColor.scheme.primary
@@ -83,21 +88,65 @@ class _TodoComponentState extends State<TodoComponent> {
               child: Row(
                 children: [
                   Expanded(
-                    child: Text(
-                      widget.todo.title ?? '--',
-                      maxLines: 1,
+                    child: AnimatedDefaultTextStyle(
+                      duration: const Duration(milliseconds: 250),
+                      curve: Curves.fastOutSlowIn,
                       style: TextStyle(
                         overflow: TextOverflow.ellipsis,
+                        decorationThickness: 2,
+                        decoration: isCompleted
+                            ? TextDecoration.lineThrough
+                            : TextDecoration.none,
                         color: isCompleted
                             ? GColor.scheme.onPrimary
                             : GColor.scheme.onSurface,
                       ),
+                      child: Text(
+                        widget.todo.title ?? '--',
+                        maxLines: 1,
+                      ),
                     ),
                   ),
-                  Checkbox(
-                    value: isCompleted,
-                    onChanged: (value) => toggleComplete(),
-                  )
+                  const SizedBox(width: 8),
+                  SizedBox.square(
+                    dimension: 32,
+                    child: IconButton.filledTonal(
+                      onPressed: () {
+                        BlocProvider.of<TodoCubit>(context)
+                            .selectTodoForUpdate(widget.todo);
+                      },
+                      iconSize: 16,
+                      icon: const Icon(Icons.edit),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  SizedBox.square(
+                    dimension: 32,
+                    child: IconButton.filledTonal(
+                      onPressed: () => GAlert.showDeleteAlert(widget.todo),
+                      iconSize: 16,
+                      icon: const Icon(Icons.delete),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  SizedBox.square(
+                    dimension: 32,
+                    child: isCompleted
+                        ? IconButton.filled(
+                            onPressed: toggleComplete,
+                            iconSize: 16,
+                            icon: const Icon(Icons.check))
+                        : IconButton.outlined(
+                            onPressed: toggleComplete,
+                            iconSize: 16,
+                            icon: const SizedBox.shrink(),
+                          ),
+                  ),
+
+                  // Checkbox(
+                  //   value: isCompleted,
+                  //   onChanged: (value) => toggleComplete(),
+                  // )
                 ],
               ),
             ),
