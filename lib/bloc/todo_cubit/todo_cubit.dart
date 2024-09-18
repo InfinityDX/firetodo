@@ -51,6 +51,7 @@ class TodoCubit extends Cubit<TodoState> {
 
   Future<void> deleteTodo(Todo todo) async {
     emit(state.copyWith(status: CubitStatus.updating));
-    await Future.delayed(const Duration(seconds: 2));
+    await repositroy.deleteTodo(todo);
+    emit(state.copyWith(status: CubitStatus.initial));
   }
 }

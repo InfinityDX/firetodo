@@ -26,7 +26,11 @@ class TodoRepository implements ITodoRepository {
 
   @override
   Future<String> deleteTodo(Todo todo) async {
-    return '';
+    String status = 'Success';
+    await todoCollection.doc(todo.id).delete().catchError((_) {
+      status = "Failed to delete todo";
+    });
+    return status;
   }
 
   @override
