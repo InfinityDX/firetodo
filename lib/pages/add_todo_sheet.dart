@@ -60,7 +60,7 @@ class _AddTodoSheetState extends State<AddTodoSheet> {
                 onChanged: (title) => this.title = title,
               ),
               const SizedBox(height: 16),
-              TextButton(
+              FilledButton(
                 onPressed: widget.todo == null ? onAdd : onEdit,
                 child: Text(widget.todo == null ? "Add" : "Edit"),
               ),

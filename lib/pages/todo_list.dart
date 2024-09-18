@@ -1,7 +1,6 @@
 import 'package:firetodo/bloc/todo_cubit/todo_cubit.dart';
 import 'package:firetodo/components/todo_component.dart';
 import 'package:firetodo/components/todo_search.dart';
-import 'package:firetodo/data/configs/g_color.dart';
 import 'package:firetodo/data/enums/cubit_enums.dart';
 import 'package:firetodo/helpers/gbottomsheet.dart';
 import 'package:flutter/material.dart';
@@ -19,12 +18,10 @@ class _TodoListState extends State<TodoList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: GColor.scheme.primary,
         title: const Text(
           "Todo List",
           style: TextStyle(fontWeight: FontWeight.w500),
         ),
-        foregroundColor: GColor.scheme.onPrimary,
       ),
       body: RefreshIndicator(
         onRefresh: BlocProvider.of<TodoCubit>(context).refreshTodo,
@@ -57,15 +54,24 @@ class _TodoListState extends State<TodoList> {
                       ],
                     );
                   }
-                  return ListView.separated(
+                  return ListView.builder(
                     itemCount: state.todos.length,
                     padding: const EdgeInsets.fromLTRB(16, 16, 16, 128),
-                    separatorBuilder: (context, index) {
-                      return const SizedBox(height: 8);
+                    // separatorBuilder: (context, index) {
+                    //   return const SizedBox(height: 8);
+                    // },
+                    findChildIndexCallback: (key) {
+                      final valueKey = key as ValueKey;
+                      final index =
+                          todos.indexWhere((todo) => todo.id == valueKey.value);
+                      return index;
                     },
                     itemBuilder: (context, index) {
                       final todo = state.todos[index];
-                      return TodoComponent(todo: todo);
+                      return TodoComponent(
+                        key: ValueKey(todo.id),
+                        todo: todo,
+                      );
                     },
                   );
                 },

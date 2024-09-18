@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firetodo/data/enums/cubit_enums.dart';
 import 'package:firetodo/data/models/todo.dart';
@@ -24,7 +23,7 @@ class TodoCubit extends Cubit<TodoState> {
       todos: todos,
     ));
     if (todoCollectionSub == null) {
-      final todoStream = repositroy.listenTodoColec();
+      final todoStream = repositroy.getStream();
       todoCollectionSub = todoStream.listen(_todoCollectListener);
     }
   }
@@ -52,5 +51,6 @@ class TodoCubit extends Cubit<TodoState> {
 
   Future<void> deleteTodo(Todo todo) async {
     emit(state.copyWith(status: CubitStatus.updating));
+    await Future.delayed(const Duration(seconds: 2));
   }
 }

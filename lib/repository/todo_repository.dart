@@ -43,7 +43,7 @@ class TodoRepository implements ITodoRepository {
   }
 
   @override
-  Stream<List<Todo>> listenTodoColec() {
+  Stream<List<Todo>> getStream() {
     return todoCollection
         .orderBy('timestamp', descending: true)
         .snapshots()

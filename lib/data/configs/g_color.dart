@@ -11,7 +11,10 @@ class GColor {
   // Theme Data to put into Material App
   static ThemeData get light => ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: _seedColor),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: _seedColor,
+          dynamicSchemeVariant: DynamicSchemeVariant.content,
+        ),
         inputDecorationTheme: inputDecorationTheme,
       );
 

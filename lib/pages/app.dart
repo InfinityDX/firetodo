@@ -16,7 +16,7 @@ class App extends StatelessWidget {
         title: 'Flutter Demo',
         theme: GColor.light,
         darkTheme: GColor.dark,
-        themeMode: ThemeMode.system,
+        themeMode: ThemeMode.light,
         navigatorKey: materialAppKey,
         home: const TodoList(),
       ),
