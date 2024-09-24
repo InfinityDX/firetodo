@@ -1,5 +1,4 @@
 import 'package:firetodo/bloc/todo_cubit/todo_cubit.dart';
-import 'package:firetodo/components/search_todo_field.dart';
 import 'package:firetodo/components/todo_component.dart';
 import 'package:firetodo/components/add_todo_field.dart';
 import 'package:firetodo/data/enums/cubit_enums.dart';
@@ -27,14 +26,9 @@ class _TodoListState extends State<TodoList> {
         ),
         body: Column(
           children: [
-            BlocBuilder<TodoCubit, TodoState>(
-              builder: (context, state) {
-                final todo = state.editingTodo;
-                return AddTodoField(todo: todo);
-              },
-            ),
-            const SizedBox(height: 8),
-            const SearchTodoField(),
+            const AddTodoField(),
+            // const SizedBox(height: 8),
+            // const SearchTodoField(),
             Expanded(
               child: BlocBuilder<TodoCubit, TodoState>(
                 builder: (context, state) {

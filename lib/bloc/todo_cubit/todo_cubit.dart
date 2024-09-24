@@ -43,7 +43,10 @@ class TodoCubit extends Cubit<TodoState> {
           .toList();
     }
 
-    emit(state.copyWith(todosView: todoView));
+    emit(state.copyWith(
+      todosView: todoView,
+      editingTodo: state.editingTodo,
+    ));
   }
 
   void _todoCollectListener(List<Todo> snapshots) {
@@ -56,7 +59,11 @@ class TodoCubit extends Cubit<TodoState> {
           .toList();
     }
 
-    emit(state.copyWith(todos: snapshots, todosView: todoView));
+    emit(state.copyWith(
+      todos: snapshots,
+      todosView: todoView,
+      editingTodo: state.editingTodo,
+    ));
   }
 
   // Future<void> refreshTodo() async {
@@ -67,22 +74,41 @@ class TodoCubit extends Cubit<TodoState> {
   //   ));
   // }
 
-  Future<void> addTodo(Todo todo) async {
+  Future<bool> addTodo(Todo todo) async {
     emit(state.copyWith(status: CubitStatus.updating));
     final response = await repositroy.addTodo(todo);
-    if (!response.isSuccess) GAlert.showAlert(response.msg);
+    if (!response.isSuccess) {
+      GAlert.showAlert(response.msg);
+      return false;
+    }
+    filterTodo("");
     emit(state.copyWith(status: CubitStatus.initial));
+    return true;
   }
 
   Future<void> selectTodoForUpdate([Todo? todo]) async {
+    if (todo == null) filterTodo('');
+    if (todo?.isCompleted ?? false) {
+      GAlert.showAlert('Cannot Edit Completed Todo');
+      return;
+    }
     emit(state.copyWith(editingTodo: todo));
+    filterTodo(todo?.title ?? '');
   }
 
-  Future<void> updateTodo(Todo todo) async {
-    emit(state.copyWith(status: CubitStatus.updating));
+  Future<bool> updateTodo(Todo todo) async {
+    emit(state.copyWith(
+      status: CubitStatus.updating,
+      editingTodo: state.editingTodo,
+    ));
     final response = await repositroy.updateTodo(todo);
-    if (!response.isSuccess) GAlert.showAlert(response.msg);
+    if (!response.isSuccess) {
+      GAlert.showAlert(response.msg);
+      return false;
+    }
+    filterTodo("");
     emit(state.copyWith(status: CubitStatus.initial));
+    return true;
   }
 
   Future<void> markTodo(Todo todo) async {
@@ -93,8 +119,11 @@ class TodoCubit extends Cubit<TodoState> {
   }
 
   Future<void> deleteTodo(Todo todo) async {
-    emit(state.copyWith(status: CubitStatus.updating));
+    emit(state.copyWith(
+      status: CubitStatus.updating,
+      editingTodo: state.editingTodo,
+    ));
     await repositroy.deleteTodo(todo);
-    emit(state.copyWith(status: CubitStatus.initial));
+    // filterTodo('');
   }
 }

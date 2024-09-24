@@ -48,7 +48,7 @@ class TodoRepository implements ITodoRepository {
   @override
   Future<List<Todo>> getTodos() async {
     final todos =
-        await todoCollection.orderBy('timestamp', descending: true).get();
+        await todoCollection.orderBy('isCompleted').orderBy('title').get();
     return todos.docs.map((e) => e.data()).toList();
   }
 
@@ -76,7 +76,9 @@ class TodoRepository implements ITodoRepository {
   @override
   Stream<List<Todo>> getStream() {
     return todoCollection
-        .orderBy('timestamp', descending: true)
+        // .orderBy('timestamp', descending: true)
+        .orderBy('isCompleted')
+        .orderBy('title')
         .snapshots()
         .asyncMap(
       (event) async {

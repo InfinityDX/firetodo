@@ -13,6 +13,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return GBlocProviders(
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: GColor.light,
         darkTheme: GColor.dark,
